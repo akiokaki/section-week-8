@@ -25,16 +25,13 @@ def params_unique_combination(baseurl, params_d, private_keys=["api_key"]):
             res.append("{}-{}".format(k, params_d[k]))
     return baseurl + "_".join(res)
 
-def search_flickr_by_tags(some_input):
-    if not FLICKR_API_KEY:
-        raise Exception('Flickr API Key is missing!')
-
-    baseurl = "https://api.flickr.com/services/rest/"
+def input_organizer(type,input,api):
+    
     params_diction = {
         "format": "json",
         "api_key": FLICKR_API_KEY,
-        # fix tags....
-        "tags": tags,
+        if type == "tags"
+            "tags": input,
         "method": "flickr.photos.search",
         "per_page": 10,
         "nojsoncallback": 1
@@ -42,7 +39,13 @@ def search_flickr_by_tags(some_input):
     
     params_diction.get(some_input)
     
-    unique_ident = params_unique_combination(baseurl,params_diction)
+def search_flickr_by_tags(some_type,some_input):
+    if not FLICKR_API_KEY:
+        raise Exception('Flickr API Key is missing!')
+    params_output = input_organizer(some_type,some_input)
+    baseurl = "https://api.flickr.com/services/rest/"
+    
+    unique_ident = params_unique_combination(baseurl,params_output)
     if unique_ident in CACHE_DICTION:
         return CACHE_DICTION[unique_ident]
     else:
@@ -68,7 +71,7 @@ CACHE_DICTION = load_cache_json()
 if DEBUG:
     print(CACHE_DICTION)
 
-results = search_flickr_by_tags('sunset summer')
+results = search_flickr_by_tags('tag,''sunset summer')
 
 photos_list = []
 for r in results['photos']['photo']:
